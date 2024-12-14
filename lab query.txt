@@ -1,0 +1,22 @@
+-- find the review description of book name = 'x';
+
+select review_description from review_info where review_id in
+ ( select review_id from relation where book_id=
+       (select book_id from book_info where book_name= 'Introduction to Automata' )
+ );
+
+select review_description from review_info where review_id in
+ ( select review_id from relation where book_id=
+       (select book_id from book_info where book_name= 'Basic Electrical' )
+ );
+
+
+
+-- find the book having max review
+
+
+with no_of_review_table(no_of_review,book_id) as
+( select count(book_id) , book_id from relation group by book_id ),
+max_review_table(max_review) as
+( select max(no_of_review) from no_of_review_table )
+select * from no_of_review_table,max_review_table,book_info where no_of_review = max_review and no_of_review_table.book_id=book_info.book_id; 
